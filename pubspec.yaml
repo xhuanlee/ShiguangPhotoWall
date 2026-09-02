@@ -1,0 +1,77 @@
+name: sgphotowall
+description: "拾光 · 影像墙 — 聚合云盘照片/视频的手机与 Android TV 照片墙应用"
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.13.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+
+  # 状态管理
+  flutter_riverpod: ^2.6.1
+
+  # 路由
+  go_router: ^14.8.1
+
+  # 数据库 (Drift / SQLite)
+  drift: ^2.24.0
+  sqlite3_flutter_libs: ^0.5.28
+
+  # 网络
+  dio: ^5.8.0+1
+
+  # 安全存储 (Android Keystore 托管)
+  flutter_secure_storage: ^10.0.0-beta.4
+
+  # 媒体
+  video_player: ^2.9.5
+
+  # 二维码
+  qr_flutter: ^4.1.0
+  mobile_scanner: ^7.0.1
+
+  # 图像处理 (Preview 生成)
+  image: ^4.5.4
+
+  # 加密 (ECDH / AES-GCM)
+  pointycastle: ^3.9.1
+
+  # Pairing LAN Server
+  shelf: ^1.4.2
+  shelf_router: ^1.1.4
+
+  # 工具
+  path_provider: ^2.1.5
+  path: ^1.9.1
+  crypto: ^3.0.6
+  collection: ^1.19.1
+  clock: ^1.1.1
+  shared_preferences: ^2.5.3
+
+  # OAuth 浏览器授权 + 深链回调
+  url_launcher: ^6.3.1
+  app_links: ^6.4.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  integration_test:
+    sdk: flutter
+
+  # 代码生成
+  build_runner: ^2.4.15
+  drift_dev: ^2.24.0
+
+  # 测试
+  mocktail: ^1.0.4
+  sqlite3: ^2.4.6
+
+flutter:
+  uses-material-design: true
