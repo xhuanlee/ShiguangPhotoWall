@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../app/account_service.dart';
 import '../../app/providers.dart';
@@ -58,9 +59,7 @@ class GalleryTabPage extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.settings_outlined),
             tooltip: '设置',
-            onPressed: () =>
-                Navigator.of(context)
-                    .pushNamed(isTv ? '/tv/settings' : '/settings'),
+            onPressed: () => context.push(isTv ? '/tv/settings' : '/settings'),
           ),
         ],
       ),

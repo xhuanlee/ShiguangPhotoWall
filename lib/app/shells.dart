@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../features/home/gallery_tab_page.dart';
 
@@ -96,7 +97,7 @@ class _TvShellState extends State<TvShell> {
               selectedIndex: _index,
               onDestinationSelected: (i) {
                 if (i == 3) {
-                  Navigator.of(context).pushNamed('/tv/settings');
+                  context.push('/tv/settings');
                 } else {
                   setState(() => _index = i);
                 }

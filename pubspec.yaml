@@ -2,7 +2,7 @@ name: sgphotowall
 description: "拾光 · 影像墙 — 聚合云盘照片/视频的手机与 Android TV 照片墙应用"
 publish_to: 'none'
 
-version: 1.0.0+1
+version: 1.0.1+2
 
 environment:
   sdk: ^3.13.2

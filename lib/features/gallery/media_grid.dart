@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../app/providers.dart';
 import '../../data/db/app_database.dart';
@@ -105,9 +106,9 @@ class _MediaGridScreenState extends ConsumerState<MediaGridScreen> {
   }
 
   void _openViewer(BuildContext context, int index) {
-    Navigator.of(context).pushNamed(
+    context.push(
       widget.isTv ? '/tv/viewer' : '/viewer',
-      arguments: ViewerArgs(
+      extra: ViewerArgs(
         items: List.of(controller.items),
         initialIndex: index,
         mediaType: widget.mediaType,

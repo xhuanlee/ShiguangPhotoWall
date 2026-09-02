@@ -7,6 +7,7 @@ import 'package:flutter/services.dart' show LogicalKeyboardKey;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sgphotowall/app/providers.dart';
+import 'package:sgphotowall/app/router.dart';
 import 'package:sgphotowall/app/shells.dart';
 import 'package:sgphotowall/data/db/app_database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -53,6 +54,41 @@ void main() {
     await tester.tap(find.text('照片').last);
     await tester.pumpAndSettle();
     expect(find.text('当前文件夹没有照片或视频'), findsOneWidget);
+
+    await teardownTree(tester);
+    await db.close();
+  });
+
+  testWidgets('GoRouter 下点击设置图标可跳转设置页（回归：pushNamed 失效）', (tester) async {
+    final db = AppDatabase.memory();
+    final prefs = await SharedPreferences.getInstance();
+    // 与生产一致：MaterialApp.router + GoRouter（测试环境无 flavor → mobile）。
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          appDatabaseProvider.overrideWithValue(db),
+          previewDirProvider.overrideWith((ref) async => Directory.systemTemp),
+          sharedPreferencesProvider.overrideWithValue(prefs),
+        ],
+        child: const SgPhotoWallApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    // 点击 AppBar 设置图标。
+    await tester.tap(find.byTooltip('设置'));
+    await tester.pumpAndSettle();
+
+    // 设置页内容可见。
+    expect(find.text('云盘'), findsOneWidget);
+    expect(find.text('播放'), findsOneWidget);
+    // “关于”在视口下方，滚动后可见。
+    await tester.scrollUntilVisible(
+      find.text('关于'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    expect(find.text('关于'), findsOneWidget);
 
     await teardownTree(tester);
     await db.close();

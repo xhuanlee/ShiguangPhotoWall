@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../app/account_service.dart';
 import '../../app/providers.dart';
@@ -120,7 +121,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 leading: const Icon(Icons.qr_code),
                 title: const Text('手机扫码同步'),
                 subtitle: const Text('显示二维码，由手机端扫码同步网盘配置'),
-                onTap: () => Navigator.of(context).pushNamed('/tv/pairing'),
+                onTap: () => context.push('/tv/pairing'),
               ),
             ),
             const SizedBox(height: 24),
@@ -131,7 +132,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 leading: const Icon(Icons.tv),
                 title: const Text('扫码同步到 TV'),
                 subtitle: const Text('扫描 TV 端二维码，将网盘配置同步到电视'),
-                onTap: () => Navigator.of(context).pushNamed('/pairing/scan'),
+                onTap: () => context.push('/pairing/scan'),
               ),
             ),
             const SizedBox(height: 24),
@@ -140,7 +141,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           const Card(
             child: Column(
               children: [
-                ListTile(title: Text('版本'), trailing: Text('1.0.0')),
+                ListTile(title: Text('版本'), trailing: Text('1.0.1')),
                 ListTile(
                   title: Text('隐私说明'),
                   subtitle: Text(
@@ -263,9 +264,9 @@ class _ProviderCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
-                    onPressed: () => Navigator.of(context).pushNamed(
+                    onPressed: () => context.push(
                       '/settings/folders',
-                      arguments: FolderPickerArgs(
+                      extra: FolderPickerArgs(
                         accountId: acc.id,
                         providerType: type,
                       ),

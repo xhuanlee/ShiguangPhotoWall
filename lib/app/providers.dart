@@ -122,17 +122,15 @@ final syncProgressProvider = StreamProvider<SyncProgress>(
   (ref) => ref.watch(syncServiceProvider).progress,
 );
 
-final settingsRepositoryProvider = Provider<SettingsRepository>((ref) {
-  final repo = SettingsRepository(ref.watch(sharedPreferencesProvider));
-  ref.onDispose(repo.dispose);
-  return repo;
-});
-
 /// 播放设置（同步快照 + 变更通知）。
+///
+/// 注意：repo 的 dispose 由 ChangeNotifierProvider 托管，
+/// 不应在其它 Provider 中对同一实例再注册 onDispose(repo.dispose)，
+/// 否则容器销毁时会双重 dispose。
 final playbackSettingsProvider = ChangeNotifierProvider<SettingsRepository>((
   ref,
 ) {
-  return ref.watch(settingsRepositoryProvider);
+  return SettingsRepository(ref.watch(sharedPreferencesProvider));
 });
 
 /// Provider 账号流（设置页 + 首页 Reauth Banner）。
