@@ -35,16 +35,24 @@ jobs:
         run: flutter test
 
       # CI 注入签名密钥（未配置时回退 debug 签名）
+      # 注意：secrets 上下文不能用于 step 的 if 条件（工作流校验会失败），
+      # 因此将空值判断放在 run 脚本内部，通过 env 注入。
       - name: Decode signing keystore
-        if: ${{ secrets.SGPW_KEYSTORE_BASE64 != '' }}
         env:
           SGPW_KEYSTORE_BASE64: ${{ secrets.SGPW_KEYSTORE_BASE64 }}
+          SGPW_KEYSTORE_PASSWORD: ${{ secrets.SGPW_KEYSTORE_PASSWORD }}
+          SGPW_KEY_ALIAS: ${{ secrets.SGPW_KEY_ALIAS }}
+          SGPW_KEY_PASSWORD: ${{ secrets.SGPW_KEY_PASSWORD }}
         run: |
-          echo "$SGPW_KEYSTORE_BASE64" | base64 --decode > $RUNNER_TEMP/release.keystore
+          if [ -z "$SGPW_KEYSTORE_BASE64" ]; then
+            echo "::notice::未配置 SGPW_KEYSTORE_BASE64，Release APK 将使用 debug 签名"
+            exit 0
+          fi
+          echo "$SGPW_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/release.keystore"
           echo "SGPW_KEYSTORE_PATH=$RUNNER_TEMP/release.keystore" >> "$GITHUB_ENV"
-          echo "SGPW_KEYSTORE_PASSWORD=${{ secrets.SGPW_KEYSTORE_PASSWORD }}" >> "$GITHUB_ENV"
-          echo "SGPW_KEY_ALIAS=${{ secrets.SGPW_KEY_ALIAS }}" >> "$GITHUB_ENV"
-          echo "SGPW_KEY_PASSWORD=${{ secrets.SGPW_KEY_PASSWORD }}" >> "$GITHUB_ENV"
+          echo "SGPW_KEYSTORE_PASSWORD=$SGPW_KEYSTORE_PASSWORD" >> "$GITHUB_ENV"
+          echo "SGPW_KEY_ALIAS=$SGPW_KEY_ALIAS" >> "$GITHUB_ENV"
+          echo "SGPW_KEY_PASSWORD=$SGPW_KEY_PASSWORD" >> "$GITHUB_ENV"
 
       - name: Build release APK (mobile)
         run: flutter build apk --release --flavor mobile
